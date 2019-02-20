@@ -94,9 +94,10 @@ class Protocol(p2protocol.Protocol):
             self.badPeerHappened()
     
     def badPeerHappened(self):
-        print "Bad peer banned:", self.addr
-        self.disconnect()
-        if self.transport.getPeer().host != '127.0.0.1': # never ban localhost
+        localhost = self.transport.getPeer().host == '127.0.0.1' or self.transport.getPeer().host == '0.0.0.0'
+        if not localhost: # never ban or disconnect localhost
+            print "Bad peer dropped:", self.addr
+            self.disconnect()
             self.node.bans[self.transport.getPeer().host] = time.time() + 60*60
     
     def _timeout(self):
