@@ -106,9 +106,6 @@ class Protocol(p2protocol.Protocol):
                 self.factory.new_block.happened(inv['hash'])
             elif inv['type'] == 'tx':
                 self.send_getdata(requests=[inv])
-            else:
-                if p2pool.DEBUG:
-                    print 'Unneeded inv type', inv
 
     message_getdata = pack.ComposedType([
         ('requests', pack.ListType(pack.ComposedType([
